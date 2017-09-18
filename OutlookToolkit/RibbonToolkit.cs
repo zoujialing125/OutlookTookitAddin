@@ -40,7 +40,7 @@ namespace OutlookToolkit
                                 if (File.Exists(fullPath))
                                 {
                                     string newFileName = "Copy of " + fileName;
-                                    var existSelection = MessageBox.Show("The attachment " + fileName + " is already existing in the folder, please select whether to KEEP BOTH or REPLACE."
+                                    var existSelection = MessageBox.Show("The file name '" + fileName + "' is already existing in the folder, please select whether to KEEP BOTH or REPLACE."
                                             , "Save Attachments", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                                     if (existSelection == DialogResult.Yes)
                                     {
