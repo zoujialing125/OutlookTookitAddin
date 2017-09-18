@@ -40,6 +40,7 @@ namespace OutlookToolkit
         {
             Settings.Default.Ignore_Rule = textBox1.Text;
             Settings.Default.Enable_Rule = checkBox1.Checked;
+            Settings.Default.Save();
             this.Close();
         }
 
