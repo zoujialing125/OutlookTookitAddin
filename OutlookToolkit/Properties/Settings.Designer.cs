@@ -34,5 +34,29 @@ namespace OutlookToolkit.Properties {
                 this["Folder_Path"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("jpg,png,gif")]
+        public string Ignore_Rule {
+            get {
+                return ((string)(this["Ignore_Rule"]));
+            }
+            set {
+                this["Ignore_Rule"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool Enable_Rule {
+            get {
+                return ((bool)(this["Enable_Rule"]));
+            }
+            set {
+                this["Enable_Rule"] = value;
+            }
+        }
     }
 }

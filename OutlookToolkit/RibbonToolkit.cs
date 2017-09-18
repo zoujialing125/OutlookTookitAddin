@@ -4,6 +4,7 @@ using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.FileIO;
 using OutlookToolkit.Properties;
 using System;
+using System.IO;
 using System.Windows.Forms;
 
 namespace OutlookToolkit
@@ -18,28 +19,60 @@ namespace OutlookToolkit
         private void btn_save_Click(object sender, RibbonControlEventArgs e)
         {
             string path = this.getPath();
-            bool flag = path != "";
-            if (flag)
+            if (path != "")
             {
                 Explorer explorer = Globals.ThisAddIn.Application.ActiveExplorer();
+                int qtyOfAtt = 0;
                 foreach (object current in explorer.Selection)
                 {
-                    bool flag2 = current is MailItem;
-                    if (flag2)
+                    if (current is MailItem)
                     {
                         MailItem mailItem = current as MailItem;
                         foreach (Attachment attachment in mailItem.Attachments)
                         {
                             string fileName = attachment.FileName;
-                            bool flag3 = !fileName.ToLower().Contains("jpg") && !fileName.ToLower().Contains("png") && !fileName.ToLower().Contains("gif");
-                            if (flag3)
+                            string fullPath = Path.Combine(path, fileName);
+                            string ext = Path.GetExtension(fileName);
+                            bool flag3 = Settings.Default.Enable_Rule && Settings.Default.Ignore_Rule.ToLower().Contains(ext.Substring(1));
+                            if (!flag3)
                             {
-                                attachment.SaveAsFile(path + "\\" + attachment.FileName);
+                                qtyOfAtt++;
+                                if (File.Exists(fullPath))
+                                {
+                                    string newFileName = "Copy of " + fileName;
+                                    var existSelection = MessageBox.Show("The attachment " + fileName + " is already existing in the folder, please select whether to KEEP BOTH or REPLACE."
+                                            , "Save Attachments", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                                    if (existSelection == DialogResult.Yes)
+                                    {
+                                        while (File.Exists(path + "\\" + newFileName))
+                                        {
+                                            newFileName = "Copy of " + newFileName;
+                                        }
+                                        attachment.SaveAsFile(path + "\\" + newFileName);
+                                    }
+                                    else
+                                    {
+                                        File.Delete(fullPath);
+                                        attachment.SaveAsFile(fullPath);
+                                    }
+                                }
+                                else
+                                {
+                                    attachment.SaveAsFile(fullPath);
+                                }
                             }
                         }
                     }
                 }
-                MessageBox.Show("Save attachments finished!", "Result:", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                if (qtyOfAtt > 0)
+                {
+                    MessageBox.Show("Save attachments finished, Total " + qtyOfAtt + " files!", "Save Attachments", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                }
+                else
+                {
+                    MessageBox.Show("No attachment saved!", "Save Attachments", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                }
+                
             }
         }
 
@@ -89,8 +122,9 @@ namespace OutlookToolkit
             foreach (Attachment attachment in objOldMail.Attachments)
             {
                 string fileName = attachment.FileName;
-                bool flag = !fileName.ToLower().Contains("jpg") && !fileName.ToLower().Contains("png") && !fileName.ToLower().Contains("gif");
-                if (flag)
+                string ext = Path.GetExtension(fileName);
+                bool flag = Settings.Default.Enable_Rule && Settings.Default.Ignore_Rule.ToLower().Contains(ext.Substring(1));
+                if (!flag)
                 {
                     string text = str + attachment.FileName;
                     attachment.SaveAsFile(text);
@@ -119,6 +153,12 @@ namespace OutlookToolkit
             }
 
             return result;
+        }
+
+        private void btn_option_Click(object sender, RibbonControlEventArgs e)
+        {
+            FormatIgnoreSetup fmIgnore = new FormatIgnoreSetup();           
+            fmIgnore.ShowDialog();
         }
     }
 }
