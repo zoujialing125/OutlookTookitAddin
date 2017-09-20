@@ -30,10 +30,10 @@
     <DefineConstants>VSTO40</DefineConstants>
     <IsWebBootstrapper>False</IsWebBootstrapper>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <PublishUrl>C:\Users\jjz052\OneDrive - Maersk Group\Coding\CSharp\Outlook Extension\</PublishUrl>
+    <PublishUrl>C:\Users\jjz052\Maersk Group\DAMCO GCA CI Automation - Macro Collection\DotNet Applications\Outlook Extension\</PublishUrl>
     <InstallUrl />
     <TargetCulture>en</TargetCulture>
-    <ApplicationVersion>1.0.0.4</ApplicationVersion>
+    <ApplicationVersion>1.0.0.5</ApplicationVersion>
     <AutoIncrementApplicationRevision>true</AutoIncrementApplicationRevision>
     <UpdateEnabled>true</UpdateEnabled>
     <UpdateInterval>7</UpdateInterval>
